@@ -1,0 +1,1 @@
+Um programa ainda em desenvolvimento para pesquisar preço de produtos de diversos sites e compara-los

@@ -18,12 +18,6 @@ if existe == False:
     cursor.execute("CREATE TABLE cadastros (usuario text, senha text)")
     banco.commit()
 
-#acessar as informações
-resultado = cursor.execute("SELECT * FROM cadastros").fetchall()
-
-for linhas in resultado:
-    print(linhas)
-
 
 #janelas
 def janelaCriar():

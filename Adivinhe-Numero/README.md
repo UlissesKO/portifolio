@@ -1,0 +1,1 @@
+Uma espécie de jogo onde o programa seleciona um número aleátorio e você tem que tentar adivinhar no menor número de tentativas possível
