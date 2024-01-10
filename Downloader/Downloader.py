@@ -61,7 +61,7 @@ def downloadVideo(url_):
 
 
 janela = Tk()#cria a window
-
+janela.resizable(False, False)
 
 quadro = Frame(janela, pady=15, padx=15, background="#333", name="downloader")#cria o espaço pra ui
 quadro.pack()#junta tudo
