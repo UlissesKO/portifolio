@@ -101,16 +101,20 @@ class main:
 
 
 def acessPassword():#pegar senha e o usuario do banco de dados e descriptografar. Ser acionado pela tab2
-    show = CURSOR.execute("SELECT * FROM Passwords")
-    a = 1
-    for i in show:
-        decryptedPassword = cry.decrypt(i[0], keyPassword)
-        ttk.Label(tab2, text=decryptedPassword, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=1)
-        decryptedUser = cry.decrypt(i[1], keyUser)
-        ttk.Label(tab2, text=decryptedUser, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=2)
-        decryptedSite = cry.decrypt(i[2], keySite)
-        ttk.Label(tab2, text=decryptedSite, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=3)
-        a += 1
+    try:
+        show = CURSOR.execute("SELECT * FROM Passwords")
+        a = 1
+        for i in show:
+            decryptedPassword = cry.decrypt(i[0], keyPassword)
+            ttk.Label(tab2, text=decryptedPassword, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=1)
+            decryptedUser = cry.decrypt(i[1], keyUser)
+            ttk.Label(tab2, text=decryptedUser, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=2)
+            decryptedSite = cry.decrypt(i[2], keySite)
+            ttk.Label(tab2, text=decryptedSite, font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=a, column=3)
+            a += 1
+            
+    except:
+        ttk.Label(tab2, text="Ainda não tem nenhuma senha salva",font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=1, column=1)
 
 keyPassword="TU-Tu_tU_-_ru="
 keyUser="_-=Max-_=.,Verstappen;"
