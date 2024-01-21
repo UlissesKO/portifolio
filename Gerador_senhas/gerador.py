@@ -117,7 +117,7 @@ def acessPassword():#pegar senha e o usuario do banco de dados e descriptografar
         ttk.Label(tab2, text="Ainda não tem nenhuma senha salva",font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=1, column=1)
 
 keyPassword="TU-Tu_tU_-_ru="
-keyUser="_-=Max-_=.,Verstappen;"
+keyUser="_-=Max-_=.,Verstappen_;"
 keySite="MAx_-mAX,MAX-_+=SupERMAX"
 
 def getData(): #coleta todos os dados e verifica se tem algum campo em branco
