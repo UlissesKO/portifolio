@@ -3,6 +3,12 @@
         margin: 0%;
         font-family: 'Roboto Mono', monospace;
         font-weight: 500;
+        background-image:url("VARIEDADE.jpg"); /*tem que ser da largura 1920 */
+        background-repeat: no-repeat;/*manda não repetir*/
+        background-size:cover;/*manda cobrir a tela inteira*/
+        background-attachment: fixed;/*faz ficar rolando junto com a tela*/
+        background-position: center;
+        overflow-x: hidden;
     }
 
     header {
@@ -10,6 +16,8 @@
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        user-select: none;
+        scroll-behavior: smooth;
     }
 
     header ul {
@@ -35,12 +43,45 @@
         color: rgb(0, 0, 0);
     }
 
+    header a img[src="instagram.png"], header a img[src="whatsapp.png"] {
+        position:relative;
+        height: 20px;
+        margin-top:30px;
+        margin-left:30px;
+    }
     .detail {
         background-color: rgb(20, 70, 232);
         width: 100%;
         height: 15px;
     }
 
+    .background {
+        font-size:50px;
+        color: rgb(255, 255, 255);
+        padding: 20px;
+        height: 600px;
+        width: 100%;
+        display: flex; /* Adiciona display flex para centralizar o conteúdo */
+        justify-content: center; /* é pra centralizar na horizontal*/
+        align-items: center; /* é pra centralizar na vertical*/
+    }
+
+    .background h1 {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 60px;
+        width:800px;
+        margin: 0; /* Remove as margens padrão do h1 */
+        padding: 10px 10%;
+        margin-top: 90px;
+        font-size:50px;
+        justify-content: center;
+    }
+
+
+    .content {
+        background-color: rgb(255, 255, 255);
+
+    }
 }
 
 @media (max-width: 520px){
