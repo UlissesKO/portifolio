@@ -3,7 +3,7 @@
         margin: 0%;
         font-family: 'Roboto Mono', monospace;
         font-weight: 500;
-        background-image:url("VARIEDADE.jpg"); /*tem que ser da largura 1920 */
+        background-image:url("images/VARIEDADE.jpg"); /*tem que ser da largura 1920 */
         background-repeat: no-repeat;/*manda não repetir*/
         background-size:cover;/*manda cobrir a tela inteira*/
         background-attachment: fixed;/*faz ficar rolando junto com a tela*/
@@ -43,7 +43,7 @@
         color: rgb(0, 0, 0);
     }
 
-    header a img[src="instagram.png"], header a img[src="whatsapp.png"] {
+    header a img[src="images/instagram.png"], header a img[src="images/whatsapp.png"] {
         position:relative;
         height: 20px;
         margin-top:30px;
