@@ -4,7 +4,7 @@ from tkinter import ttk
 import random
 import sqlite3 as sql
 import os
-
+import time
 
 BACKGROUND_COLOR = "#000033"
 BACKGROUND_TITLE_COLOR = "#003366"
@@ -98,7 +98,10 @@ class main:
         verify()
         CURSOR.execute("INSERT INTO Passwords VALUES (?, ?, ?)", (self.cryptoPassword, self.cryptoUser, self.cryptoSite))
         DATA_BASE.commit()
+        aviso = ttk.Label(tab1, text="Senha Salva", takefocus = False, padding=5, background=BACKGROUND_COLOR, foreground=FONT_COLLOR)
+        aviso.grid(row=8, column=2)
 
+        aviso.after(3000, lambda: aviso.destroy())
 
 def acessPassword():#pegar senha e o usuario do banco de dados e descriptografar. Ser acionado pela tab2
     try:
@@ -114,7 +117,10 @@ def acessPassword():#pegar senha e o usuario do banco de dados e descriptografar
             a += 1
             
     except:
-        ttk.Label(tab2, text="Ainda não tem nenhuma senha salva",font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR).grid(row=1, column=1)
+        aviso = ttk.Label(tab2, text="Ainda não tem nenhuma senha salva",font="consolas 12", foreground=FONT_COLLOR, background=BACKGROUND_COLOR)
+        aviso.grid(row=1, column=1)
+        aviso.after(4000, lambda: aviso.destroy())
+    
 
 keyPassword="TU-Tu_tU_-_ru="
 keyUser="_-=Max-_=.,Verstappen_;"
