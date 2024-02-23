@@ -19,6 +19,7 @@ while correct == False: #Para garantir nenhum erro na hora de escrever o numero 
     try:
         rounds = input("Quantas palavras vai escrever? ")
         Round = int(rounds.strip()) 
+        round_ = Round
 
         correct = True
 
@@ -53,4 +54,5 @@ for time in Times: #Calcula a media do tempo
     media += time
 media /= Round
 
-print(f"Parabéns, você fez {points} pontos e teve uma média de {media} segundos por palavra!")
+
+print(f"Parabéns, você fez {points}/{round_} pontos e teve uma média de {round(media, 3)} segundos por palavra!")
