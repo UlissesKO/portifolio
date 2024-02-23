@@ -1,0 +1,1 @@
+É uma espécie de jogo de digitação, onde você digita as palavras que aparecem no terminal e vê quem fez mais rápido
