@@ -28,12 +28,12 @@ class Downloader:
                 elif tuple[1] == True and tuple[2] == True:
                     self.Download_audio(tuple[0])
                     self.Download_video(tuple[0])
-                else:
+                elif tuple[1] == False and tuple[2] == True:
                     self.Download_video(tuple[0])
 
             popUp("Download finalizado!")
         except:
-            popUp(f"Algo deu errado com a {link}ª música, tente mais tarde")
+            popUp(f"Algo deu errado com o {link+1}ª video, tente mais tarde")
 
         linkList.clear()
    
