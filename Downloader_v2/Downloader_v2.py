@@ -32,8 +32,11 @@ class Downloader:
                     self.Download_video(tuple[0])
 
             popUp("Download finalizado!")
+        except OSError:
+            popUp(f"Armazenamento cheio")
         except:
             popUp(f"Algo deu errado com o {link+1}ª video, tente mais tarde")
+        
 
         linkList.clear()
    
