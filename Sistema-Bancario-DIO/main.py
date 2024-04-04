@@ -1,4 +1,3 @@
-#Tem q ter sacar depositar e vizualizar extrato
 valorConta = 0
 LIMITE = 500
 numeroSaque = 0
@@ -6,6 +5,7 @@ saque = 0
 opcao = 1
 quantidadeSaques = 0
 quantidadeDepositos = 0
+users = {}
 
 def sacar(valorSaque, valorConta, quantidadeSaques):#Só pode 3 saques diarios de no maximo 500, Registrado no extrato
     if quantidadeSaques <= 3:
@@ -28,7 +28,8 @@ def depositar(valorDeposito, valorConta, quantidadeDepositos):
 def vizualizar():
     print(f"Você possui R%{valorConta},00 na conta bancária\n Foram feitos {quantidadeSaques} saques e {quantidadeDepositos} depósitos")
 
-while opcao != 1 or opcao != 2 or opcao != 3 or opcao!= 0:
+
+while opcao != 1 or opcao != 2 or opcao != 3 or opcao != 0:
     opcao = input("Digite a operação desejada\n[1] Saque\n[2] Depósito\n[3] Extrato\n[0] Sair\n")
     match opcao:
         case "1":
@@ -45,3 +46,5 @@ while opcao != 1 or opcao != 2 or opcao != 3 or opcao!= 0:
             vizualizar()
         case "0":
             break
+        case _ :
+            print("Digite uma opção válida")
