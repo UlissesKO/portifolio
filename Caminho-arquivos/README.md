@@ -1,1 +1,0 @@
-um programa para me ajudar a encontrar o caminho absoluto dos arquivos quando eu estiver programando
