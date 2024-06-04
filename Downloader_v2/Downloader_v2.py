@@ -40,14 +40,14 @@ class Downloader:
 
         linkList.clear()
    
-    def Download_audio(self, url):
-        audio = YouTube(url).streams.get_audio_only().download(self.dire) #pytube
+    def Download_audio(self):
+        audio = YouTube(self.url).streams.get_audio_only().download(self.dire) #pytube
         base, ext = os.path.splitext(audio)  #os
         arquivo_novo = base + ".mp3"
         os.rename(audio, arquivo_novo)
 
-    def Download_video(self, url):
-        YouTube(url).streams.get_highest_resolution().download(self.dire) #pytube
+    def Download_video(self):
+        YouTube(self.url).streams.get_highest_resolution().download(self.dire) #pytube
 
 
 def addItem(entry_): #Adiciona item pra lista e apaga o texto do entry   
