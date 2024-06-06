@@ -27,13 +27,13 @@ class Gerenciador():
         else:
             pass
     
-    def consultarBanco():#Vai ver quantas linhas tem no banco, pra colocar no hud
+    def consultarBanco(self):#Vai ver quantas linhas tem no banco, pra colocar no hud
         pass
 
-    def alterarQntdLinha():#Vai mudar a quantidade de linhas de tal cor no banco
+    def alterarQntdLinha(self):#Vai mudar a quantidade de linhas de tal cor no banco
         pass
 
-    def adicionarCorNova():#Vai jogar uma nova cor de linha no banco de dados
+    def adicionarCorNova(self):#Vai jogar uma nova cor de linha no banco de dados
         pass
     
 #Tkinter
@@ -42,14 +42,18 @@ def addLinha():
     janela.configure(background=BACKGROUND_COLOR, padx=10, pady=10)
 
     ttk.Label(janela, text="Insira o código da linha", font=TEXT_FONT, foreground=FONT_COLOR, background=BACKGROUND_COLOR, padding=10).grid(row=0, column=0)
-    cod = ttk.Entry(janela, font=TEXT_FONT, width=6, background="white")
+    cod = ttk.Entry(janela, font=TEXT_FONT, width=6)
     cod.grid(row=0, column=1)
 
     ttk.Label(janela, text="Escreva a cor da linha", font=TEXT_FONT, foreground=FONT_COLOR, background=BACKGROUND_COLOR, padding=10).grid(row=1, column=0)
-    cor = ttk.Entry(janela, font=TEXT_FONT, width=6, background="white")
+    cor = ttk.Entry(janela, font=TEXT_FONT, width=10)
     cor.grid(row=1, column=1)
 
-    add = ttk.Button(janela, text="Add", takefocus=False, padding=2, width=BUTTON_WIDTH)
+    ttk.Label(janela, text="Quantos cones tem?", font=TEXT_FONT, foreground=FONT_COLOR, background=BACKGROUND_COLOR, padding=10).grid(row=2, column=0)
+    cor = ttk.Entry(janela, font=TEXT_FONT, width=3)
+    cor.grid(row=2, column=1) 
+
+    add = ttk.Button(janela, text="Add", takefocus=False, padding=2, width=BUTTON_WIDTH, command=lambda:obj.adicionarCorNova())
     add.grid(row=4, column=2)#Esse botao vai chamar a função adicionarCorNova()
 
 obj = Gerenciador("GerenciadorLinhas\linhas.sql")
