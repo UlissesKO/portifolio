@@ -3,9 +3,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 
-
-
-
 class Gerenciador():
     def __init__(self, path):
         self.path = path
@@ -26,15 +23,47 @@ class Gerenciador():
         else:
             pass
 
-    
-    def consultarBanco(self):#Vai ver quantas linhas tem no banco, pra colocar no hud
-        pass
+    #Ta dando certo
+    def consultarBanco(self, window, font_color, text_font, background_color):#Vai ver quantas linhas tem no banco, pra colocar no hud
+        try:
+            show = self.cursor.execute("SELECT * from linhas")
+            a = 1
+            for i in show:
+                ttk.Label(window, text="Código: ", font=text_font, foreground=font_color, background=background_color).grid(row=a, column=0, sticky="w")
+                ttk.Label(window, text=i[0], font=text_font, foreground=font_color, background=background_color).grid(row=a, column=1, sticky="w")
+                ttk.Label(window, text="Cor: ", font=text_font, foreground=font_color, background=background_color).grid(row=a, column=2, sticky="w")
+                ttk.Label(window, text=i[1], font=text_font, foreground=font_color, background=background_color).grid(row=a, column=3, sticky="w")
+                ttk.Label(window, text="Quantidade: ", font=text_font, foreground=font_color, background=background_color).grid(row=a, column=4, sticky="w")
+                ttk.Label(window, text=i[2], font=text_font, foreground=font_color, background=background_color).grid(row=a, column=5, sticky="w")
+                a += 1
+        except:
+            print("Deu errado")
 
     def alterarQntdLinha(self):#Vai mudar a quantidade de linhas de tal cor no banco
         pass
 
+    #Ta dando certo
     def adicionarCorNova(self, cod, cor, qntd):#Vai jogar uma nova cor de linha no banco de dados
-        pass
+        #Verifica se o cod é um número
+        try:
+            # Verifica se o código é um número
+            int(cod)
+            
+            # Verifica se a cor está correta
+            cor = cor.lower().strip()
+            
+            # Verifica se a quantidade é um número
+            qntd = int(qntd)
+
+            self.cursor.execute("INSERT INTO linhas VALUES (?, ?, ?)", (cod, cor, qntd))
+            self.banco.commit()
+
+        except ValueError:
+            app.popUp("Insira um número válido em código ou quantidade!")
+        except AttributeError:
+            app.popUp("Escreva a cor por extenso!")
+                
+
 
 class Window():
     def __init__(self, button_width, background_color, font_color, title_font, text_font):
@@ -69,9 +98,10 @@ class Window():
         title.grid(row=0, column=0, columnspan=8, sticky="nsew")
 
         #Vou precisar fazer algo parecido com for loop nas linhas do banco de dados pra colocar elas aqui
+        self.obj.consultarBanco(window, self.font_color, self.text_font, self.background_color)
 
         add = ttk.Button(frame, text="Adicionar linha", takefocus=False, command=lambda:self.addLinha(), width=self.button_width)
-        add.grid(row=6, column=8, sticky="nsew")
+        add.grid(row=1000, column=8, sticky="nsew")
 
         window.lift()#Vai fazer a janela abrir a cima de tudo
         window.attributes("-topmost", True)
@@ -99,8 +129,13 @@ class Window():
                          command=lambda:self.obj.adicionarCorNova(cod.get(), cor.get(), qntd.get()))
         add.grid(row=4, column=0)#Esse botao vai chamar a função adicionarCorNova()
 
+    def popUp(self, mesage):
+        janela_msg = Toplevel()
+        janela_msg.title("Aviso")
+        janela_msg.resizable(False, False)
+        janela_msg.configure(background=self.background_color)
+        Label(janela_msg, text=mesage, font=self.title_font, pady=15, background=self.background_color).pack()
+        Button(janela_msg, text="Fechar", font=self.text_font, command=janela_msg.destroy).pack()
 
 app = Window(15, "#b4dff0", "#030608", "Helvetica 15 bold", "consolas 12 bold")
 app.createDB()
-
-
