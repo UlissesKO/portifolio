@@ -28,6 +28,11 @@ class Window():
         self.obj = Gerenciador(path)
         self.main()
     
+    def initialize_popUp(self, background_color, title_font, text_font):
+        self.background_color = background_color
+        self.title_font = title_font
+        self.text_font = text_font
+    
     def main(self):
         self.window = Tk()
         self.window.resizable(False, False)
@@ -81,28 +86,24 @@ class Window():
         qntd.grid(row=2, column=1) 
 
         add = ttk.Button(janela, text="Add", takefocus=False, padding=2, width=self.button_width, 
-                         command=lambda:(self.obj.adicionarCorNova(cod.get(), cor.get(), qntd.get(),
-                                                                   self.popUp("Insira um número válido em código ou quantidade!"),
-                                                                   self.popUp("Escreva a cor por extenso!"),
-                                                                   self.popUp("Cor já existente no banco de dados")),                                                                   
-                                                                   self.atualizar_frame()))
+                         command=lambda:(self.atualizar_frame(cod.get(), cor.get(), qntd.get())))
         add.grid(row=4, column=0)
     
     def popUp(self, mesage):
-        print("Abriu popUp")
         janela_msg = Toplevel()
         janela_msg.title("Aviso")
         janela_msg.resizable(False, False)
         janela_msg.configure(background=self.background_color)
         Label(janela_msg, text=mesage, font=self.title_font, pady=15, background=self.background_color).pack()
         Button(janela_msg, text="Fechar", font=self.text_font, command=janela_msg.destroy).pack()
-        print("Abriu popUp")
     
-    def atualizar_frame(self):#O problema ta aqui
+    def atualizar_frame(self, cod, cor, qntd):#O problema ta aqui
         # Limpa o frame atual
         for i in self.window.winfo_children():
             i.destroy()
-        
+
+        self.obj.adicionarCorNova(cod, cor, qntd)    
+            
         frame = Frame(self.window, padx= 5, pady=5, background=self.background_color, name="gerenciador")
         frame.grid(sticky="nswe")
 
@@ -133,8 +134,11 @@ class Window():
         self.window.mainloop()
 
 
-class Gerenciador():
+
+
+class Gerenciador(Window):
     def __init__(self, path):
+        self.initialize_popUp("#b4dff0", "Helvetica 15 bold", "consolas 12 bold")
 
         self.path = path
         
@@ -153,7 +157,6 @@ class Gerenciador():
         else:
             pass
 
-    #Ta dando certo
     def consultarBanco(self, window, font_color, text_font, background_color):#Vai ver quantas linhas tem no banco, pra colocar no hud
         try:
             show = self.cursor.execute("SELECT * from linhas")
@@ -199,14 +202,19 @@ class Gerenciador():
     def proxPag(self):
         pass
     
-    def adicionarCorNova(self, cod, cor, qntd, popup1, popup2, popup3):#Vai jogar uma nova cor de linha no banco de dados
+    def adicionarCorNova(self, cod, cor, qntd):#Vai jogar uma nova cor de linha no banco de dados
         #Verifica se o cod é um número
         try:
             # Verifica se o código é um número
             int(cod)
             
-            # Verifica se a cor está correta
-            cor = cor.lower().strip()
+            # Verifica se a cor está correta e escrita por extenso
+            num = range(10)
+
+            if any(char.isdigit() for char in cor):
+                raise ValueError
+            else:      
+                cor = cor.lower().strip()
             
             # Verifica se a quantidade é um número
             qntd = int(qntd)
@@ -223,16 +231,13 @@ class Gerenciador():
                 raise Exception("Cor ja existente")
 
         except ValueError:
-            popup1#Fazer disso pra todos os popups
+            super().popUp(mesage="Insira um número válido em código ou quantidade!\nOu se a cor esta escrita por extenso")
         except AttributeError:
-            popup2
+            super().popUp(mesage="Escreva a cor por extenso!")
         except Exception as e:
             if str(e) == "Cor ja existente":
-                popup3
-            else:
-                pass
-
-    
+                super().popUp(mesage="Cor já existente no banco de dados")
+  
 
 if __name__ == '__main__':
     app = Window(15, "#b4dff0", "#030608", "Helvetica 15 bold", "consolas 12 bold")
