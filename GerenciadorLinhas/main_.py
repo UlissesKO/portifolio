@@ -163,7 +163,7 @@ class Gerenciador(Window):
             a = 1
             for i in show:
                 ttk.Label(window, text="  Código: ", font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=0, sticky="w")
+                          background=background_color, name=i[0]).grid(row=a, column=0, sticky="w") #Posso usar name pra chamar a label especifica
                 ttk.Label(window, text=i[0], font=text_font, foreground=font_color, 
                           background=background_color).grid(row=a, column=1, sticky="w")
                 ttk.Label(window, text="  Cor: ", font=text_font, foreground=font_color, 
@@ -174,9 +174,9 @@ class Gerenciador(Window):
                           background=background_color).grid(row=a, column=4, sticky="w")
                 ttk.Label(window, text=i[2], font=text_font, foreground=font_color, 
                           background=background_color).grid(row=a, column=5, sticky="w")
-                ttk.Button(window, text="+", width=1, command=lambda:self.addumaLinha(i[0], i[2]), 
+                ttk.Button(window, text="+", width=1, command=lambda:self.addumaLinha(i[0]), 
                            takefocus=False).grid(row=a, column=6, sticky="e")
-                ttk.Button(window, text="-", width=1, command=lambda:self.delumaLinha(i[0], i[2]), 
+                ttk.Button(window, text="-", width=1, command=lambda:self.delumaLinha(i[0]), 
                            takefocus=False).grid(row=a, column=7, sticky="e")
                 ttk.Button(window, text="🗑️", width=2, command=lambda:self.delLinha(i[0]), takefocus=False).grid(row=a, column=8, sticky="e")
                 a += 1
@@ -190,14 +190,14 @@ class Gerenciador(Window):
         except:
             print("Deu errado")
 
-    def addumaLinha(self, cod, qntd):
-        pass
+    def addumaLinha(self, cod):
+        print(cod)
 
-    def delumaLinha(self, cod, cor, qntd):
-        pass
+    def delumaLinha(self, cod):
+        print(cod)
 
-    def delLinha(self, cod, cor, qntd):
-        pass
+    def delLinha(self, cod):
+        print(cod)
 
     def proxPag(self):
         pass
