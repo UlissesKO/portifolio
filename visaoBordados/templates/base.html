@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"></a>
+        <ul>
+            {% block menu %}
+            {% endblock %}
+        </ul>    
+        <a href="https://www.instagram.com/visaobordados/" target="_blank">
+            <img src="{{ url_for('static', filename='img/instagram.png')}}" style="padding-right: 10em; padding-left: 10em; 
+                                                                                height: 40px; padding-top: 20px;"></a> 
+        <a href="https://api.whatsapp.com/send?phone=551199767-5004&text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento%20sem%20compromisso!"target="_blank">
+            <img src="{{ url_for('static', filename='img/whatsapp.png')}}", style="height: 40px; padding-top: 20px;"></a>   
+        <p class="detail"></p> 
+    </header>
+    {% block content %}
+    {% endblock %}
+    <footer>
+        <p>whatsapp</p>
+        <p>email</p>
+    </footer>
+</body>
+</html>
