@@ -162,23 +162,17 @@ class Gerenciador(Window):
             show = self.cursor.execute("SELECT * from linhas")
             a = 1
             for i in show:
-                ttk.Label(window, text="  Código: ", font=text_font, foreground=font_color, 
-                          background=background_color, name=i[0]).grid(row=a, column=0, sticky="w") #Posso usar name pra chamar a label especifica
-                ttk.Label(window, text=i[0], font=text_font, foreground=font_color, 
+                ttk.Label(window, text=f"  Código: {i[0]}", font=text_font, foreground=font_color, 
+                          background=background_color).grid(row=a, column=0, sticky="w") #Posso usar name pra chamar a label especifica
+                ttk.Label(window, text=f"  Cor: {i[0]}", font=text_font, foreground=font_color, 
                           background=background_color).grid(row=a, column=1, sticky="w")
-                ttk.Label(window, text="  Cor: ", font=text_font, foreground=font_color, 
+                ttk.Label(window, text=f"  Quantidade: {i[0]}         ", font=text_font, foreground=font_color, 
                           background=background_color).grid(row=a, column=2, sticky="w")
-                ttk.Label(window, text=i[1], font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=3, sticky="w")
-                ttk.Label(window, text="  Quantidade: ", font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=4, sticky="w")
-                ttk.Label(window, text=i[2], font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=5, sticky="w")
                 ttk.Button(window, text="+", width=1, command=lambda:self.addumaLinha(i[0]), 
-                           takefocus=False).grid(row=a, column=6, sticky="e")
+                           takefocus=False).grid(row=a, column=3, sticky="e")
                 ttk.Button(window, text="-", width=1, command=lambda:self.delumaLinha(i[0]), 
-                           takefocus=False).grid(row=a, column=7, sticky="e")
-                ttk.Button(window, text="🗑️", width=2, command=lambda:self.delLinha(i[0]), takefocus=False).grid(row=a, column=8, sticky="e")
+                           takefocus=False).grid(row=a, column=4, sticky="e")
+                ttk.Button(window, text="🗑️", width=2, command=lambda:self.delLinha(i[0]), takefocus=False).grid(row=a, column=5, sticky="e")
                 a += 1
                 #Vai chamar as funções aqui, com os dados que ja tao negoçados aqui
                 if a == 11:
