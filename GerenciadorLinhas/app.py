@@ -5,6 +5,8 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from os import _exit
 
+label_list = []
+
 #Depois criar um programa separado para criar o arquivo sql
 class Window():
     def __init__(self, button_width, background_color, font_color, title_font, text_font):
@@ -63,9 +65,6 @@ class Window():
         delete = ttk.Button(frame, text="Remover linha", takefocus=False, command=lambda:self.delLinha(), width=self.button_width)
         delete.grid(row=1000, column=0, columnspan=3, sticky="nsew")
 
-        prox = ttk.Button(frame, text="Proxima página", takefocus=False, command=lambda:self.proxPag(), width=self.button_width)
-        prox.grid(row=1000, column=6, sticky="nsew")
-
         self.window.lift()#Vai fazer a janela abrir a cima de tudo
         self.window.attributes("-topmost", True)
         self.window.after_idle(self.window.attributes, '-topmost', False)
@@ -82,7 +81,7 @@ class Window():
         cod.grid(row=0, column=1)
 
         ttk.Label(janela, text="Escreva a cor da linha", font=self.text_font, foreground=self.font_color, 
-                  background=self.background_color, padding=10).grid(row=1, column=0)
+                    background=self.background_color, padding=10).grid(row=1, column=0)
         cor = ttk.Entry(janela, font=self.text_font, width=10)
         cor.grid(row=1, column=1)
 
@@ -95,8 +94,6 @@ class Window():
                          command=lambda:(self.atualizar_frame(cod.get(), cor.get(), qntd.get(), Add_or_Del)))
         add.grid(row=4, column=0)                                                   #Add_or_Del = True : Adiciona Linha
                                                                                    #           = False: Deleta linha
-    def proxPag(self):
-        print("Dar um jeito de mostrar as próximas páginas")
 
     def addLinha(self):
         self.janelaLinha('Add', True)
@@ -113,7 +110,7 @@ class Window():
         Label(janela_msg, text=mesage, font=self.title_font, pady=15, background=self.background_color).pack()
         Button(janela_msg, text="Fechar", font=self.text_font, command=janela_msg.destroy).pack()
     
-    def atualizar_frame(self, cod, cor, qntd, Add_or_Del):#O problema ta aqui
+    def atualizar_frame(self, cod, cor, qntd, Add_or_Del):#Só vai recriar o frame para atualizar a contagem
         # Limpa o frame atual
         for i in self.window.winfo_children():
             i.destroy()
@@ -121,7 +118,7 @@ class Window():
         if Add_or_Del == True:
             self.obj.adicionarCorNova(cod, cor, qntd)   
         else:
-             self.obj.deletarCor(cod, cor, qntd)  
+             self.obj.deletarCor(cod, qntd)  
             
         frame = Frame(self.window, padx= 5, pady=5, background=self.background_color, name="gerenciador")
         frame.grid(sticky="nswe")
@@ -149,9 +146,6 @@ class Window():
         
         delete = ttk.Button(frame, text="Remover linha", takefocus=False, command=lambda:self.delLinha(), width=self.button_width)
         delete.grid(row=1000, column=0, columnspan=3, sticky="nsew")
-
-        prox = ttk.Button(frame, text="Proxima página", takefocus=False, command=lambda:self.delLinha(), width=self.button_width)
-        prox.grid(row=1000, column=6, sticky="nsew")
 
         self.window.lift()#Vai fazer a janela abrir a cima de tudo
         self.window.attributes("-topmost", True)
@@ -184,28 +178,74 @@ class Gerenciador(Window):
             pass
 
     def consultarBanco(self, window, font_color, text_font, background_color):#Vai ver quantas linhas tem no banco, pra colocar no hud
-        try:
-            show = self.cursor.execute("SELECT * from linhas")
-            a = 1
-            for i in show:
-                ttk.Label(window, text=f"  Código: {i[0]}", font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=2, sticky="w") #Posso usar name pra chamar a label especifica
-                ttk.Label(window, text=f"  Cor: {i[1]}", font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=3, sticky="w")
-                ttk.Label(window, text=f"  Quantidade: {i[2]}         ", font=text_font, foreground=font_color, 
-                          background=background_color).grid(row=a, column=4, sticky="w")
-                a += 1
-                #Vai chamar as funções aqui, com os dados que ja tao negoçados aqui
-                if a == 11:
-                    ttk.Label(window, text="", font=text_font, foreground=font_color, 
-                              background=background_color).grid(row=a, column=0, sticky="w")
-                    ttk.Button(window, text="Próximo", command=lambda:self.proxPag(), 
-                               takefocus=False).grid(row=a+1, column=6, columnspan=3, sticky="e")
-                    break
-        except:
-            print("Deu errado")
+        
+        self.cursor.execute("SELECT * from linhas")
+        show = self.cursor.fetchall()#Vai transformar o resultado da consulta em uma lista
+        a = 1
+        for i in show:
+            a1 = ttk.Label(window, text=f"  Código: {i[0]}", font=text_font, foreground=font_color, 
+                           background=background_color)
+            b1 = ttk.Label(window, text=f"  Cor: {i[1]}", font=text_font, foreground=font_color, 
+                           background=background_color)
+            c1 = ttk.Label(window, text=f"  Quantidade: {i[2]}         ", font=text_font, foreground=font_color, 
+                           background=background_color)
 
-    def deletarCor(self, cod, cor, qntd):
+            label_list.append([a1, b1, c1])
+
+            a1.grid(row=a, column=1)
+            b1.grid(row=a, column=2)
+            c1.grid(row=a, column=3)
+        
+            a += 1
+            
+            #Vai chamar as funções aqui, com os dados que ja tao negoçados aqui
+            if a == 11:
+                ttk.Label(window, text="", font=text_font, foreground=font_color, 
+                            background=background_color).grid(row=a, column=0, sticky="w")
+                ttk.Button(window, text="Próximo", command=lambda:self.proxPag(a-1, show, window, font_color, text_font, background_color), 
+                            takefocus=False).grid(row=a+1, column=6, columnspan=3, sticky="e")
+                break
+    
+    def proxPag(self, a, show, window, font_color, text_font, background_color):
+        b = 1
+        
+        for i in label_list:
+            i[0].destroy()
+            i[1].destroy()
+            i[2].destroy()
+
+        label_list.clear()
+
+        for i in show[a:]:
+            a1 = ttk.Label(window, text=f"  Código: {i[0]}", font=text_font, foreground=font_color, 
+                           background=background_color)
+            b1 = ttk.Label(window, text=f"  Cor: {i[1]}", font=text_font, foreground=font_color, 
+                           background=background_color)
+            c1 = ttk.Label(window, text=f"  Quantidade: {i[2]}         ", font=text_font, foreground=font_color, 
+                           background=background_color)
+            
+            label_list.append([a1, b1, c1])
+            
+            a1.grid(row=a, column=1)
+            b1.grid(row=a, column=2)
+            c1.grid(row=a, column=3)
+
+            a += 1
+            b += 1  
+            #Vai chamar as funções aqui, com os dados que ja tao negoçados aqui
+            if b == 11:
+                ttk.Label(window, text="", font=text_font, foreground=font_color, 
+                            background=self.background_color).grid(row=a, column=0, sticky="w")
+                ttk.Button(window, text="Próximo", command=lambda:self.proxPag(a-1, show), 
+                            takefocus=False).grid(row=b+1, column=6, columnspan=3, sticky="e")
+                break
+
+
+        ttk.Button(window, text='Voltar', command=lambda:self.consultarBanco(window, font_color, text_font, background_color), 
+                    takefocus=False).grid(row=12, column=0, columnspan=3, sticky='w')
+
+
+    def deletarCor(self, cod, qntd):
         print("Deletar do banco")
     
     def adicionarCorNova(self, cod, cor, qntd):#Vai jogar uma nova cor de linha no banco de dados
