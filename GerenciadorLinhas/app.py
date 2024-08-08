@@ -110,7 +110,7 @@ class Window():
         Label(janela_msg, text=mesage, font=self.title_font, pady=15, background=self.background_color).pack()
         Button(janela_msg, text="Fechar", font=self.text_font, command=janela_msg.destroy).pack()
     
-    def atualizar_frame(self, cod, cor, qntd, Add_or_Del):#Só vai recriar o frame para atualizar a contagem
+    def atualizar_frame(self, cod, cor, qntd, Add_or_Del):#Só vai recriar o frame para atualizar a contagem   
         # Limpa o frame atual
         for i in self.window.winfo_children():
             i.destroy()
@@ -172,14 +172,35 @@ class Gerenciador(Window):
         existe = self.cursor.fetchone() is not None
 
         if existe == False:
-            self.cursor.execute("CREATE TABLE linhas (códigoLinha, corLinha, qntd)")
+            self.cursor.execute(f"CREATE TABLE {self.nome_tabela} (códigoLinha, corLinha, qntd)")
             self.banco.commit()
         else:
             pass
 
-    def consultarBanco(self, window, font_color, text_font, background_color):#Vai ver quantas linhas tem no banco, pra colocar no hud
+        self.organizarBanco()
+
+    def organizarBanco(self):
+        consulta = f"SELECT * FROM {self.nome_tabela} ORDER BY corLinha ASC"
+        resultado = self.cursor.execute(consulta)
+        resultado = resultado.fetchall()
+
+        self.cursor.execute(f"DROP TABLE {self.nome_tabela}")
+        self.banco.commit()
+
+        self.cursor.execute(f"CREATE TABLE {self.nome_tabela} (códigoLinha, corLinha, qntd)")
+        self.banco.commit()
+
+        for i in resultado:
+            self.cursor.execute(f"INSERT INTO {self.nome_tabela} VALUES (?, ?, ?)", (i[0], i[1], i[2]))
+            self.banco.commit()
+
+
         
-        self.cursor.execute("SELECT * from linhas")
+        
+
+    def consultarBanco(self, window, font_color, text_font, background_color):#Vai ver quantas linhas tem no banco, pra colocar no hud
+
+        self.cursor.execute(f"SELECT * from {self.nome_tabela}")
         show = self.cursor.fetchall()#Vai transformar o resultado da consulta em uma lista
         a = 1
         for i in show:
@@ -246,7 +267,46 @@ class Gerenciador(Window):
 
 
     def deletarCor(self, cod, qntd):
-        print("Deletar do banco")
+                #Verifica se o cod é um número
+        try:
+            # Verifica se o código é um número
+            int(cod)
+            
+            
+            # Verifica se a quantidade é um número
+            qntd = int(qntd)
+
+            consulta = f'SELECT * FROM {self.nome_tabela} WHERE códigoLinha = ?'
+            self.cursor.execute(consulta, (cod,))
+            resultado = self.cursor.fetchone()
+            if resultado is None:
+                super().popUp(mesage='Esta linha não existe no armazém')
+            else:
+                resultado = list(resultado)
+                quantidade = int(resultado[2])
+                qntd = int(qntd)
+                if quantidade >= qntd:
+                    qntdFinal = quantidade - qntd
+
+                    atualizacao = f'UPDATE {self.nome_tabela} SET qntd = ? WHERE códigoLinha = ?'
+                    self.cursor.execute(atualizacao, (qntdFinal, cod,))
+                    self.banco.commit()
+
+                    delet = f'DELETE FROM {self.nome_tabela} WHERE qntd = 0'
+                    self.cursor.execute(delet)
+                    self.banco.commit()
+
+                else:
+                    super().popUp(mesage='Você quer deletar mais linhas do que existem no armazém')
+
+        except ValueError:
+            super().popUp(mesage="Insira um número válido em código ou quantidade!\n")
+        except AttributeError:
+            super().popUp(mesage="Escreva a cor por extenso!")
+
+        
+
+
     
     def adicionarCorNova(self, cod, cor, qntd):#Vai jogar uma nova cor de linha no banco de dados
         #Verifica se o cod é um número
@@ -269,17 +329,18 @@ class Gerenciador(Window):
             resultado = self.cursor.fetchone() 
 
             if resultado is None:
-                self.cursor.execute("INSERT INTO linhas VALUES (?, ?, ?)", (cod, cor, qntd))
+                self.cursor.execute(f"INSERT INTO {self.nome_tabela} VALUES (?, ?, ?)", (cod, cor, qntd))
                 self.banco.commit()
-                print("Adicionado no banco")
+
             else:
                 resultado = list(resultado)
                 qntdFinal = resultado[2] + qntd
 
                                 #UPDATE é pra atualizar uma linha da database
-                self.cursor.execute("UPDATE linhas SET qntd = ? WHERE códigoLinha = ?  ", (qntdFinal, cod, ))
+                self.cursor.execute(f"UPDATE {self.nome_tabela} SET qntd = ? WHERE códigoLinha = ?  ", (qntdFinal, cod, ))
                 self.banco.commit()
-                print("Atualizado")
+
+            self.organizarBanco()
 
         except ValueError:
             super().popUp(mesage="Insira um número válido em código ou quantidade!\nOu se a cor esta escrita por extenso")
