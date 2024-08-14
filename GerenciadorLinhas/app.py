@@ -125,7 +125,7 @@ class Window():
 
         self.window.grid_rowconfigure(0, weight=1)
         self.window.grid_columnconfigure(0, weight=1)
-        
+
         img = ImageTk.PhotoImage(Image.open("GerenciadorLinhas\logo.png"))
         panel = Label(frame, image = img)
         panel.grid(row=0, column=0, columnspan=2)
