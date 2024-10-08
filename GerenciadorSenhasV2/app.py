@@ -48,7 +48,7 @@ class Gerenciador():
                 if not self.path:
                     return
                 else:
-                    self.Database = Database("db.sql", password)
+                    self.Database = Database(self.path, password)
     
     def system(self) -> None:
         
@@ -62,15 +62,97 @@ class Gerenciador():
 
         match option:
             case "1":
-                os.system("cls")
-                print("----Gerador de senhas----")
-                Generator.encrypt(self.password)
-                
+                self.getOpts()
+ 
             case "2":
                 os.system("cls")
                 print("----Visualizador de senhas----")
 
-                self.Database.showPass()
+                passwords = self.Database.showPass()
+                for i in passwords:
+                    print(i)
+    
+    def getOpts(self):
+        os.system("cls")
+        print("----Gerador de senhas----")
+        dict = {
+            'site' : '',
+            'login' : '',
+            'qntd' : 0,
+            'number' : 0,
+            'specialChar' : 0,
+            'mixLowHigh' : 0,
+        }
+        opt = input("Digite o site: ")
+        while opt == "":
+            opt = input("Inválido\nDigite o site: ")
+        dict['site'] = opt
+
+        opt = input("Digite o login: ")
+        while opt == "":
+            opt = input("Inválido\nDigite o login: ")
+        dict["login"] = opt
+        while True:
+            while True:
+                try:
+                    opt = input("Quantos caracteres? (Escreva em número de 4 à  24)\n")
+                    opt = int(opt)
+                    while opt < 4 or opt > 24:
+                        raise Exception
+
+                    dict['qntd'] = opt
+
+                    break
+                except:
+                    print("Inválido")
+
+            while True:
+                try:
+                    opt = input("Senha com números? [1=Sim][2=Não]\n")
+                    opt = int(opt)
+                    while opt != 1 and opt != 2:
+                        raise Exception
+
+                    dict['number'] = opt
+
+                    break
+                except:
+                    print("Inválido")
+            while True:
+                try:
+                    opt = input("Caracteres especiais? [1=Sim][2=Não]\n")
+                    opt = int(opt)
+                    while opt != 1 and opt != 2:
+                        raise Exception
+
+                    dict["specialChar"] = opt
+
+                    break
+                except:
+                    print("Inválido")
+            while True:
+                try:
+                    opt = input("Misturar maiúsculo e minúsculo? [1=Sim][2=Não]\n")
+                    opt = int(opt)
+                    while opt != 1 and opt != 2:
+                        raise Exception
+
+                    dict["mixLowHigh"] = opt
+
+                    break
+                except:
+                    print("Inválido")
+
+            while True:
+                opt = input("Continuar? [1=Sim][2=Não]\n")
+                while opt != "1" and opt != "2":
+                    opt = input("Inválido\nContinuar? [1=Sim][2=Não]\n")
+                break
+            if opt == "1":
+                break
+            else:
+                pass
+        Generator().encrypt(self.password, dict)
 
 if __name__ == "__main__":
     Gerenciador()
