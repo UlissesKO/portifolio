@@ -7,7 +7,7 @@ import os
 class Gerenciador():
     def __init__(self) -> None:
         self.password = self.getPassword()
-        self.getDb(self.password)
+        self.getDb()
         self.system()
     
     def getPassword(self) -> str:
@@ -65,12 +65,7 @@ class Gerenciador():
                 self.getOpts()
  
             case "2":
-                os.system("cls")
-                print("----Visualizador de senhas----")
-
-                passwords = self.Database.showPass()
-                for i in passwords:
-                    print(i)
+                self.showPass
     
     def getOpts(self):
         os.system("cls")
@@ -81,7 +76,7 @@ class Gerenciador():
             'qntd' : 0,
             'number' : 0,
             'specialChar' : 0,
-            'mixLowHigh' : 0,
+            'lowHighCase' : 0,
         }
         opt = input("Digite o site: ")
         while opt == "":
@@ -108,9 +103,9 @@ class Gerenciador():
 
             while True:
                 try:
-                    opt = input("Senha com números? [1=Sim][2=Não]\n")
+                    opt = input("Senha com números? [1=Sim][0=Não]\n")
                     opt = int(opt)
-                    while opt != 1 and opt != 2:
+                    while opt != 1 and opt != 0:
                         raise Exception
 
                     dict['number'] = opt
@@ -120,9 +115,9 @@ class Gerenciador():
                     print("Inválido")
             while True:
                 try:
-                    opt = input("Caracteres especiais? [1=Sim][2=Não]\n")
+                    opt = input("Caracteres especiais? [1=Sim][0=Não]\n")
                     opt = int(opt)
-                    while opt != 1 and opt != 2:
+                    while opt != 1 and opt != 0:
                         raise Exception
 
                     dict["specialChar"] = opt
@@ -132,27 +127,38 @@ class Gerenciador():
                     print("Inválido")
             while True:
                 try:
-                    opt = input("Misturar maiúsculo e minúsculo? [1=Sim][2=Não]\n")
+                    opt = input("Misturar maiúsculo e minúsculo? [1=Sim][0=Não]\n")
                     opt = int(opt)
-                    while opt != 1 and opt != 2:
+                    while opt != 1 and opt != 0:
                         raise Exception
-
-                    dict["mixLowHigh"] = opt
+                    if opt == 0:
+                        opt = input("Letras maiúsculas ou minúsculas?[M=Maiusculas][m=Minusculas]")
+                        while opt != "M" and opt != "m":
+                            raise Exception
+                    
+                    dict["lowHighCase"] = opt
 
                     break
                 except:
                     print("Inválido")
 
             while True:
-                opt = input("Continuar? [1=Sim][2=Não]\n")
-                while opt != "1" and opt != "2":
-                    opt = input("Inválido\nContinuar? [1=Sim][2=Não]\n")
+                opt = input("Continuar? [1=Sim][0=Não]\n")
+                while opt != "1" and opt != "0":
+                    opt = input("Inválido\nContinuar? [1=Sim][0=Não]\n")
                 break
             if opt == "1":
                 break
             else:
                 pass
-        Generator().encrypt(self.password, dict)
+        Generator().encrypt(dict=dict, database=self.Database)
+    
+    def showPass(self):
+        passwords = self.Database().showPass()
+
+        print("---Mostrar as senhas---")
+        for i in passwords:
+            print(i)
 
 if __name__ == "__main__":
     Gerenciador()
